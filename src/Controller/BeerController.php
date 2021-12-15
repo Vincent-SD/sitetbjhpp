@@ -7,6 +7,8 @@ use App\Entity\Rank;
 use App\Form\BeerType;
 use App\Repository\BeerRepository;
 use App\Repository\RankRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,6 +38,7 @@ class BeerController extends AbstractController
         return $this->render('beer/index.html.twig', [
             'rankBeers' => $rankBeers,
             'ranks' => $rankRepository->findAll(),
+            'nbBeers' => $this->getNumberOfBeers($beerRepository)
         ]);
     }
 
@@ -104,5 +107,17 @@ class BeerController extends AbstractController
         }
 
         return $this->redirectToRoute('beer_index');
+    }
+
+    /**
+     * @param BeerRepository $beerRepository
+     * @return int LE NOMBRE DE BIERASSES DANS LA BASE
+     */
+    public function getNumberOfBeers(BeerRepository $beerRepository): int{
+        try {
+            return $beerRepository->nbBeers();
+        } catch (NoResultException | NonUniqueResultException $e) {
+        }
+        return 0;
     }
 }

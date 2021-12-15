@@ -150,3 +150,21 @@ footer p {
     display: block;
 }
 
+#nbBeers{
+    display: flex;
+    color: black;
+    max-width: fit-content;
+    text-shadow: 1px 1px 1px #5eb5e0;
+    margin-left: -1em;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
+.zoom{
+    transition: transform 0.3s;
+}
+
+.zoom:hover{
+    transform: scale(1.5);
+}
+

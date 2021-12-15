@@ -19,6 +19,17 @@ class BeerRepository extends ServiceEntityRepository
         parent::__construct($registry, Beer::class);
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
+     */
+    public function nbBeers():int{
+        return $this->createQueryBuilder('nb')
+            ->select('count(nb.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     // /**
     //  * @return Beer[] Returns an array of Beer objects
     //  */
