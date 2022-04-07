@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Beer;
+use App\Entity\Rank;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -29,6 +30,7 @@ class BeerRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
 
     // /**
     //  * @return Beer[] Returns an array of Beer objects

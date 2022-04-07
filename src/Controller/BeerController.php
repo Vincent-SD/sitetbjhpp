@@ -9,6 +9,7 @@ use App\Repository\BeerRepository;
 use App\Repository\RankRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -66,6 +67,35 @@ class BeerController extends AbstractController
     }
 
     /**
+     * @Route("/export", name="beer_export", methods={"GET"})
+     */
+    public function exportToCsv(RankRepository $rankRepository): Response
+    {
+
+        $ranks = $rankRepository->findAll();
+        $rankBeers =array();
+
+        $str = "id, Name, Description, Tier\n";
+
+        foreach ($ranks as $rank){
+            $rankBeers[$rank->getName()] = $rank;
+        }
+
+        foreach ($rankBeers as $rank => $beer){
+            foreach ($beer->getBeers() as $b){
+                $str .= $b->getId() . ", " .  $b->getName() . ", " . str_replace(",","-", $b->getDescription()) . ", " . $rank . "\n";
+            }
+        }
+
+        $content = utf8_decode($str);
+
+        return new Response($content, 200, array(
+            'Content-Type' => 'application/force-download',
+            'Content-Disposition' => 'attachment; filename="beer_export.csv"'
+        ));
+    }
+
+    /**
      * @Route("/{id}", name="beer_show", methods={"GET"})
      */
     public function show(Beer $beer): Response
@@ -120,4 +150,5 @@ class BeerController extends AbstractController
         }
         return 0;
     }
+
 }
