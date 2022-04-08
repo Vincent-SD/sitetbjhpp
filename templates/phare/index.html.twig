@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Phare index{% endblock %}
+
+{% block body %}
+    <h1>Phare index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Longitude</th>
+                <th>Latitude</th>
+                <th>Image</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for phare in phares %}
+            <tr>
+                <td>{{ phare.id }}</td>
+                <td>{{ phare.name }}</td>
+                <td>{{ phare.description }}</td>
+                <td>{{ phare.longitude }}</td>
+                <td>{{ phare.latitude }}</td>
+                <td>{{ phare.image }}</td>
+                <td>
+                    <a href="{{ path('phare_show', {'id': phare.id}) }}">show</a>
+                    <a href="{{ path('phare_edit', {'id': phare.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('phare_new') }}">Create new</a>
+{% endblock %}
