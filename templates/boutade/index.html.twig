@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}La boutada journalière amusez-vous{% endblock %}
+
+{% block body %}
+    <style>
+        .creation{
+            margin-top: 50px;
+        }
+    </style>
+    <script>
+        window.onload = function(){
+            {% if app.user %}
+                alert({{ boutade.title }})
+            {% endif %}
+        }
+
+    </script>
+{#    TODO RECUP UNE BOUTADE RANDOM#}
+
+{% endblock %}

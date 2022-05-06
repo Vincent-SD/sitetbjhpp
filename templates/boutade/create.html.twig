@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une boutade{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_row(form.title, {'attr' : {'placeholder' : "título del boutada"}}) }}
+    {{ form_row(form.content, {'attr' : {'placeholder' : "disfruto a la boutada (contenido (apprecio la broma (Ich weiß den Witz zu schätzen)))"}}) }}
+    {{ form_row(form.author, {'attr' : {'placeholder' : "AUTOR DEL CHISTE(VERFASSER DES WITZES)"}}) }}
+    {{ form_row(form.category, {'attr' : {'placeholder' : "categorie"}}) }}
+    <button class="btn btn-success">Crear el boutada (el chiste(den Witz erfinden))</button>
+    {{ form_end(form) }}
+
+
+
+{% endblock %}
