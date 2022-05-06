@@ -19,6 +19,13 @@ class BoutadeRepository extends ServiceEntityRepository
         parent::__construct($registry, Boutade::class);
     }
 
+    public function countBoutades():int{
+        return $this->createQueryBuilder('boutade')
+            ->select('count(boutade.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     // /**
     //  * @return Boutade[] Returns an array of Boutade objects
     //  */

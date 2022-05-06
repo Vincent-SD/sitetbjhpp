@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Boutade;
 use App\Form\BoutadeType;
 use App\Repository\BoutadeRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,17 +22,22 @@ class BoutadeController extends AbstractController
     /**
      * @Route("/", name="boutade_index", methods={"GET"})
      */
-    public function index(BoutadeRepository $boutadeRepository): Response
+    public function index(ManagerRegistry $managerRegistry, BoutadeRepository $boutadeRepository): Response
     {
-        return $this->render('boutade/index.html.twig', [
-            'boutades' => $boutadeRepository->findAll(),
-        ]);
+        $random_id = $this->getRandomBoutadeId($boutadeRepository);
+        $rand_boutade = $boutadeRepository->find($random_id);
+        return $this->show($boutadeRepository, $random_id);
+
+//        return $this->render('boutade/index.html.twig', [
+//            'boutade' => $rand_boutade,
+//            'nb_boutades' => $this->getNbBoutades($boutadeRepository)
+//        ]);
     }
 
     /**
-     * @Route("/new", name="boutade_new", methods={"GET","POST"})
+     * @Route("/create", name="boutade_create", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function create(Request $request): Response
     {
         $boutade = new Boutade();
         $form = $this->createForm(BoutadeType::class, $boutade);
@@ -43,7 +51,7 @@ class BoutadeController extends AbstractController
             return $this->redirectToRoute('boutade_index');
         }
 
-        return $this->render('boutade/new.html.twig', [
+        return $this->render('boutade/create.html.twig', [
             'boutade' => $boutade,
             'form' => $form->createView(),
         ]);
@@ -52,10 +60,11 @@ class BoutadeController extends AbstractController
     /**
      * @Route("/{id}", name="boutade_show", methods={"GET"})
      */
-    public function show(Boutade $boutade): Response
+    public function show(BoutadeRepository $repository, int $id): Response
     {
+        $rand_boutade = $repository->find($id);
         return $this->render('boutade/show.html.twig', [
-            'boutade' => $boutade,
+            'boutade' => $rand_boutade,
         ]);
     }
 
@@ -96,15 +105,26 @@ class BoutadeController extends AbstractController
     /**
      * @Route("/random", name="boutade_get",methods={"GET","POST"})
      */
-    public function getRandomBoutade(){
+    public function getRandomBoutadeId(BoutadeRepository $repository){
 
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
+        $random_id = rand(1,$this->getNbBoutades($repository));
+        return $random_id;
 
-        if ($user->getBoutadeDate() == null || time() - $user->getBoutadeDate() > (24*3600) ){
+//        if ($user->getBoutadeDate() == null || time() - $user->getBoutadeDate() > (24*3600) ){
+//        }
+    }
 
-
-
+    /**NB OF BOUTADES XD
+     * @param BoutadeRepository $repository
+     */
+    public function getNbBoutades(BoutadeRepository $repository){
+        try{
+            return $repository->countBoutades();
+        } catch(NoResultException | NonUniqueResultException $e){
+            echo("ERROR : " . $e);
         }
+        return 0;
     }
 }
