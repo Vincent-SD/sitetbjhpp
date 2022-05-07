@@ -24,14 +24,18 @@ class BoutadeController extends AbstractController
      */
     public function index(ManagerRegistry $managerRegistry, BoutadeRepository $boutadeRepository): Response
     {
+        //todo quand refresh empecher de redonner la meme
+        //todo faire un truc pour que le mec puisse voir les boutades de la meme catégorie que celle quil a obtenu
         $random_id = $this->getRandomBoutadeId($boutadeRepository);
-        $rand_boutade = $boutadeRepository->find($random_id);
-        return $this->show($boutadeRepository, $random_id);
+        $boutades = $boutadeRepository->findAll();
+        $rand_index = rand(0, sizeof($boutades)-1);
 
-//        return $this->render('boutade/index.html.twig', [
-//            'boutade' => $rand_boutade,
-//            'nb_boutades' => $this->getNbBoutades($boutadeRepository)
-//        ]);
+        $rand_boutade = $boutades[$rand_index];
+
+        return $this->render('boutade/index.html.twig', [
+            'boutade' => $rand_boutade,
+            'nb_boutades' => $this->getNbBoutades($boutadeRepository)
+        ]);
     }
 
     /**

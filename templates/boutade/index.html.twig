@@ -4,18 +4,64 @@
 
 {% block body %}
     <style>
-        .creation{
-            margin-top: 50px;
-        }
-    </style>
-    <script>
-        window.onload = function(){
-            {% if app.user %}
-                alert({{ boutade.title }})
-            {% endif %}
+        #bouton-modal{
+            display: block;
+            box-shadow: 3px 3px 2px 1px rgba(0, 123, 255, .2);
+            width: 300px;
+            height: 100px;
+            font-size: 25px;
         }
 
-    </script>
-{#    TODO RECUP UNE BOUTADE RANDOM#}
+        .creation{
+            margin-top: 10em;
+        }
+
+        body{
+            background-color:white;
+            background-image:url({{ asset('img/mmmmh.png') }});
+            background-attachment:fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .center {
+            margin: 0;
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        #categorie-name{
+            width: max-content;
+            border-radius: 2px;
+        }
+    </style>
+
+    <button id="bouton-modal" type="button" data-toggle="modal" data-target="#modal-boutade" class="btn btn-info btn-lg text-center center">Envoie ma boutade</button>
+
+    <div id="modal-boutade" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="titulo">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="titulo" class="modal-title">{{ boutade.title }}</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <p>{{ boutade.content }}</p>
+                    <p class="font-italic">{{ boutade.author }}</p>
+                    <p id="categorie-name" class="alert-info">{{ boutade.category.name }}</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
