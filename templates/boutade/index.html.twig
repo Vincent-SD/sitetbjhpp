@@ -39,22 +39,22 @@
         }
     </style>
 
-    <button id="bouton-modal" type="button" data-toggle="modal" data-target="#modal-boutade" class="btn btn-info btn-lg text-center center">Envoie ma boutade</button>
+    <button id="bouton-modal" type="button" class="btn btn-info btn-lg text-center center">Envoie ma boutade</button>
 
     <div id="modal-boutade" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="titulo">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 id="titulo" class="modal-title">{{ boutade.title }}</h3>
+                    <h3 id="titulo" class="modal-title"></h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
                 <div class="modal-body">
-                    <p id="boutade-content">{{ boutade.content }}</p>
-                    <p id="boutade-author" class="font-italic">{{ boutade.author }}</p>
-                    <p id="categorie-name" class="alert-info">{{ boutade.category.name }}</p>
+                    <p id="boutade-content"></p>
+                    <p id="boutade-author" class="font-italic"></p>
+                    <p id="categorie-name" class="alert-info"></p>
                 </div>
 
                 <div class="modal-footer">
@@ -64,4 +64,27 @@
         </div>
     </div>
 
+    <script>
+        $(document).on('click', '#bouton-modal', function(event){
+            event.preventDefault();
+            $.ajax({
+                url:'/boutade/random-boutade',
+                method:'GET',
+                dataType:'JSON'
+            }).done(function(data){
+                pd(data, function(){
+                    $('#modal-boutade').modal('toggle');
+                });
+            });
+        });
+
+        function pd(data, callback){
+            $('#titulo').text(data.title);
+            $('#boutade-content').text(data.content);
+            $('#boutade-author').text(data.author);
+            $('#categorie-name').text(data.categoryName);
+            callback();
+        }
+
+    </script>
 {% endblock %}

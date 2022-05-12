@@ -8,6 +8,7 @@ use App\Repository\BoutadeRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,14 +27,32 @@ class BoutadeController extends AbstractController
     {
         //todo quand refresh empecher de redonner la meme
         //todo faire un truc pour que le mec puisse voir les boutades de la meme catégorie que celle quil a obtenu
-        $boutades = $boutadeRepository->findAll();
-        $rand_index = rand(0, sizeof($boutades)-1);
-
-        $rand_boutade = $boutades[$rand_index];
+//        $boutades = $boutadeRepository->findAll();
+//        $rand_index = rand(0, sizeof($boutades)-1);
+//
+//        $rand_boutade = $boutades[$rand_index];
         return $this->render('boutade/index.html.twig', [
-            'boutade' => $rand_boutade,
+//            'boutade' => $rand_boutade,
             'nb_boutades' => $this->getNbBoutades($boutadeRepository)
         ]);
+    }
+
+    /**
+     * @param BoutadeRepository $repository
+     * @Route("/random-boutade", name="random_boutade", methods={"GET"})
+     */
+    public function randBoutade(BoutadeRepository $repository): Response{
+        $boutades = $repository->findAll();
+        $rand_index = rand(0, sizeof($boutades)-1);
+        $rand_boutade = $boutades[$rand_index];
+        $obj = new StdClass();
+        $obj->title = $rand_boutade->getTitle();
+        $obj->content = $rand_boutade->getContent();
+        $obj->author = $rand_boutade->getAuthor();
+        $obj->categoryName = $rand_boutade->getCategory()->getName();
+        echo json_encode($obj);
+        return new Response();
+
     }
 
     /**
