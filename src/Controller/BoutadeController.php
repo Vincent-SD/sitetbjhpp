@@ -26,12 +26,10 @@ class BoutadeController extends AbstractController
     {
         //todo quand refresh empecher de redonner la meme
         //todo faire un truc pour que le mec puisse voir les boutades de la meme catégorie que celle quil a obtenu
-        $random_id = $this->getRandomBoutadeId($boutadeRepository);
         $boutades = $boutadeRepository->findAll();
         $rand_index = rand(0, sizeof($boutades)-1);
 
         $rand_boutade = $boutades[$rand_index];
-
         return $this->render('boutade/index.html.twig', [
             'boutade' => $rand_boutade,
             'nb_boutades' => $this->getNbBoutades($boutadeRepository)
