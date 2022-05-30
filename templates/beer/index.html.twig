@@ -43,15 +43,22 @@
 
 <div class="card mt-2" style="padding-left: 10em; border-radius: 20px; background-color: rgba(255,255,255,0.8);">
     <h2 id="nbBeers" class="row card-title zoom">{{ nbBeers }} bières notées</h2>
-    {% for rank,beers in rankBeers %}
 
+
+    <div class="row">
+        <div>
+            <button type="button" id="giga_plus_beers" class="btn btn-secondary" data-toggle="collapse" data-target=".beersforrank">Giga <strong>+/-</strong></button>
+        </div>
+    </div>
+    {% for rank,beers in rankBeers %}
+        
         {% if beers.beers[0] is defined %}
             <div class="row">
                 <a style="margin-left: -7em" aria-controls="rank{{ beers.beers[0].tier.id }}" aria-expanded="false" data-toggle="collapse" href="#rank{{ beers.beers[0].tier.id }}" class="mt-2 col-1 btn btn-secondary btn-circle btn-sm"> + </a>
                 <h1 class="col-12 text-left" style="color :{{ beers.beers[0].tier.color }}"> {{ rank }} </h1>
             </div>
-
-            <div class="collapse show" id="rank{{ beers.beers[0].tier.id }}">
+            
+            <div class="collapse beersforrank" id="rank{{ beers.beers[0].tier.id }}">
                 {% for beer in beers.beers %}
                     <div>
                         <h3> <a href="{{ path('beer_edit', {'id': beer.id}) }}">{{ beer.name }}</a></h3>
