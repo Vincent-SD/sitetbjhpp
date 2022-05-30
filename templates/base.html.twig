@@ -22,12 +22,12 @@
                     return 0;
                 }
                 let random = Math.random() * 100;
-                if(random < 15){
+                if(random < 5){
                     $('#cookiemodal').modal('show');
                 }
                 $(document).on('click','#okdegage',function (event) {
                     let random2 = Math.random() * 100;
-                    if(random2 < 20) {
+                    if(random2 < 85) {
                         setTimeout(() => {
                             $('#cookiemodal').modal('show');
                         }, 500);
