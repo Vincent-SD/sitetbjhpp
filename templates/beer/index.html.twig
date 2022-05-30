@@ -47,7 +47,7 @@
 
     <div class="row">
         <div>
-            <button type="button" id="giga_plus_beers" class="btn btn-secondary" data-toggle="collapse" data-target=".beersforrank">Giga <strong>+/-</strong></button>
+            <button type="button" id="giga_plus_beers" class="btn btn-secondary">Giga <strong>+/-</strong></button>
         </div>
     </div>
     {% for rank,beers in rankBeers %}
@@ -72,4 +72,14 @@
     {% endfor %}
 
 </div>
+
+    <script>
+       $(document).ready(function(){
+           let collapsed = true;
+           $(document).on('click','#giga_plus_beers', function(){
+               $('.beersforrank').collapse(collapsed ? 'show' : 'hide');
+               collapsed = !collapsed;
+           });
+       })
+    </script>
 {% endblock %}
