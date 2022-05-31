@@ -23,24 +23,25 @@
                 }
                 let cookie_chance_of_showing_up = Math.random() * 100;
                 if(cookie_chance_of_showing_up < 15){
-                    $('#cookiemodal').modal('show');
+                    $('#cookiemodal').modal({backdrop: 'static', keyboard: false}, 'show');
                 }
                 $(document).on('click','#okdegage',function (event) {
                     let recursive_cookie_chance = Math.random() * 100;
                     let probability;
 
-                    {% if app.user and is_granted('ROLE_ACCESMAISPASTROP') %}
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_ACCESMAISPASTROP') %}
                         //.0 pour le lore xd
                         probability = 99.0;
                         console.log("coucou cyril gros pd prend tes cookie de merde et fais pas chier");
-                    {% elseif app.user and is_granted('ROLE_ADMIN')%}
+                        console.log("trouve le cheat code pour te barrer ou tente avec la chance sale merde");
+                    {% elseif is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_ADMIN')%}
                         probability = 20;
                     {% else %}
                         probability = 60;
                     {% endif %}
                     if(recursive_cookie_chance <= probability) {
                         setTimeout(() => {
-                            $('#cookiemodal').modal('show');
+                            $('#cookiemodal').modal({backdrop: 'static', keyboard: false}, 'show');
                         }, 500);
                     }
                 });
@@ -101,6 +102,14 @@
                 <li class="nav-item">
                     <p class="welcomeUser" style="font-size: 1.3em"><b> Bienvenue {{  app.user.username }} !</b></p>
                     <p class="mt-n4 nbCouronnes"> <b>Vous avez <span id="nbCouronnes">{{ app.user.couronnes }}</span> couronnes</b></p>
+                    <p id="role-in-navbar" class="mt-n4 mb-n1">{% if is_granted('ROLE_ADMIN') %}
+                            Administrator
+                        {% elseif is_granted('ROLE_ACCESMAISPASTROP') %}
+                            Accès mais pas trop
+                        {% else %}
+                            User
+                        {% endif %}
+                    </p>
                 </li>
                 <li>
                     <a class="nav-link aggroOn" href="{{ path('app_logout') }}"> Se déconnecter</a>
@@ -129,7 +138,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="cookieChiant1">Eh salut a tous on se retrouve pour une vidéo de call of duty</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">­</span>
                 </button>
             </div>
             <div class="modal-body">
