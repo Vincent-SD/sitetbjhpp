@@ -33,7 +33,7 @@
                         //.0 pour le lore xd
                         probability = 99.0;
                         console.log("coucou cyril gros pd prend tes cookie de merde et fais pas chier");
-                    {% else if app.user and is_granted('ROLE_ADMIN')%}
+                    {% elseif app.user and is_granted('ROLE_ADMIN')%}
                         probability = 20;
                     {% else %}
                         probability = 60;
