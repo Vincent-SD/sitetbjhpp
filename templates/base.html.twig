@@ -29,18 +29,19 @@
                     let recursive_cookie_chance = Math.random() * 100;
 
                     {% if app.user and is_granted('ROLE_ACCESMAISPASTROP') %}
-                    console.log("coucou cyril gros pd prend tes cookie de merde et fais pas chier");
-                    if(recursive_cookie_chance < 99) {
-                        setTimeout(() => {
-                            $('#cookiemodal').modal('show');
-                        }, 500);
-                    }
-                    {% else %}
-                    if(recursive_cookie_chance < 80) {
-                        setTimeout(() => {
-                            $('#cookiemodal').modal('show');
-                        }, 500);
-                    }
+                        console.log("coucou cyril gros pd prend tes cookie de merde et fais pas chier");
+                        if(recursive_cookie_chance < 99) {
+                            setTimeout(() => {
+                                $('#cookiemodal').modal('show');
+                            }, 500);
+                        }
+                        {% else %}
+                        if(recursive_cookie_chance < 80) {
+                            setTimeout(() => {
+                                $('#cookiemodal').modal('show');
+                            }, 500);
+                        }
+                    {% endif %}
                 });
             });
         }) ();
