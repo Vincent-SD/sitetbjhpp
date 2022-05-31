@@ -27,21 +27,22 @@
                 }
                 $(document).on('click','#okdegage',function (event) {
                     let recursive_cookie_chance = Math.random() * 100;
+                    let probability;
 
                     {% if app.user and is_granted('ROLE_ACCESMAISPASTROP') %}
+                        //.0 pour le lore xd
+                        probability = 99.0;
                         console.log("coucou cyril gros pd prend tes cookie de merde et fais pas chier");
-                        if(recursive_cookie_chance < 99) {
-                            setTimeout(() => {
-                                $('#cookiemodal').modal('show');
-                            }, 500);
-                        }
-                        {% else %}
-                        if(recursive_cookie_chance < 80) {
-                            setTimeout(() => {
-                                $('#cookiemodal').modal('show');
-                            }, 500);
-                        }
+                    {% else if app.user and is_granted('ROLE_ADMIN')%}
+                        probability = 20;
+                    {% else %}
+                        probability = 60;
                     {% endif %}
+                    if(recursive_cookie_chance <= probability) {
+                        setTimeout(() => {
+                            $('#cookiemodal').modal('show');
+                        }, 500);
+                    }
                 });
             });
         }) ();
