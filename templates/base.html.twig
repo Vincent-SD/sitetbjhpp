@@ -176,19 +176,18 @@
 {% if app.user %}
     {% block javascripts %}
         {% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_ADMIN') %}
-        <script type="text/javascript">
-            $(document).on('click', '.aggroOn', function (e) {
-                let a = Math.random() * 100;
-                if(a <= 5) {
-                    e.preventDefault();
-                    window.location.href = '/aggro';
-                }
-            })
-        </script>
+            <script type="text/javascript">
+                $(document).on('click', '.aggroOn', function (e) {
+                    let a = Math.random() * 100;
+                    if(a <= 5) {
+                        e.preventDefault();
+                        window.location.href = '/aggro';
+                    }
+                })
+            </script>
+        {% endif %}
     {% endblock %}
 {% endif %}
 </body>
-
-
 
 </html>
