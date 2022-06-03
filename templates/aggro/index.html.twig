@@ -72,6 +72,7 @@
     <script type="text/javascript">
         let compte_Noyeurs = 6;
         let crane = true;
+
         $(document).ready(function () {
             $(document).on('click', '#activer-aggro', function () {
                 $(this).fadeOut('fast');
@@ -84,6 +85,7 @@
 
                 $(document).on('click', '.noyeur', function () {
                     $('#imagesnoyeurs').css('flex-direction', crane ? 'row' : 'row-reverse');
+                    $('#imagesnoyeurs').css('margin-top', crane ? '0em' : '4em');
                     crane = !crane;
                     compte_Noyeurs--;
                     $(this).fadeOut('fast');
