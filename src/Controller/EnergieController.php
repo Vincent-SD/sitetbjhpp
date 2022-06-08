@@ -40,7 +40,7 @@ class EnergieController extends AbstractController
      * @Route("/success-energie", name="energie_success_fake")
      * @Route("/success-energie/{energie_token}", name="energie_success")
      */
-    public function after(ManagerRegistry $manager, $energie_token, RequestStack $requestStack){
+    public function after(ManagerRegistry $manager, $energie_token=null, RequestStack $requestStack){
         if($this->getUser() != null) {
             $bonusCouronnes = 20;
 
