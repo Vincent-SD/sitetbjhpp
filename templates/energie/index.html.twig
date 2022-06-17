@@ -14,6 +14,8 @@
         }
     </style>
 
+    <div id="token" style="display: none" data-token="{{ energietoken }}"></div>
+
     <div class="offset-3 col-6">
         <div class="card" id="puisage" style="margin-top: 25em">
             <a id="puiser" style="font-size: 3em" class="btn alert-success btn-light">
@@ -28,8 +30,8 @@
             audio.play();
             $('#puisage').html('<span style="font-size: 3em" class="btn alert-success btn-light">puisage en cours</span>');
             window.setTimeout(function(){
-
-                window.location.href = '/success-energie';
+                let token = $('#token').data("token");
+                window.location.href = '/success-energie/'+token;
             }, 4500);
         });
     </script>
