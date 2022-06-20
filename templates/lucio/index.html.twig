@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello LucioController!{% endblock %}
+{% block title %}Bonjour LucioController!{% endblock %}
 
 {% block body %}
     <style>
@@ -11,27 +11,52 @@
     <div class="example-wrapper">
         <h1>Hello {{ controller_name }}! ✅</h1>
 
+        <div class="row mx-auto justify-content-center">
+            <h5 id="message_json" style="display:none; font-style: italic; font-size: 2em"></h5>
+        </div>
         <label for="textareajson">Entrez du json à parser</label>
         <textarea class="form-control" id="textareajson" rows="3"></textarea>
     </div>
-    <div class="row mx-auto justify-content-center ">
+    <div class="row mx-auto justify-content-center">
         <button id=validjson type="submit" class="btn btn-primary">Valider le json</button>
     </div>
+
     <div class="mt-5 progress" id="jsonprogress" style="display:none">
         <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
-    <div id="onvaparserdujson" class="row mx-auto">
 
+    <!-- Modal -->
+    <div class="modal fade" id="modal_json" tabindex="-1" role="dialog" aria-labelledby="modal_json" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">TON JSON PARSED</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <pre id="le_json_parser_avec_un_et_pas_un_er"></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Merci merci merciatoi 😳 </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript">
         $(document).on('click','#validjson',function (event) {
-            let audio  = new Audio('music/onvaparserdujson.wav');
-            audio.play();
-            $('#jsonprogress').show();
-            let lejsonaparse = $('#textareajson').val();
             try{
+                //parseur de foudre
+                let lejsonaparse = $('#textareajson').val();
                 let json = JSON.parse(lejsonaparse);
+                let json_to_display = JSON.stringify(json, undefined, 4);
+                //audio
+                let audio  = new Audio('music/onvaparserdujson.wav');
+                audio.play();
+                $('#jsonprogress').show();
+                let message_json = $("#message_json");
                 let i = 0;
                 //dev html action p2b notamment
                 let progressbar = '<div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>';
@@ -41,13 +66,23 @@
                     $('#jsonprogress .progress-bar').attr('aria-valuenow', ++i).css('width', i+'%');
                     if(i === 100){
                         $('#jsonprogress .progress-bar').addClass('bg-success');
+                        message_json.text("Tres bon json notamment");
+                        message_json.css('color', 'green');
+                        message_json.fadeIn();
+                        $("#le_json_parser_avec_un_et_pas_un_er").text(json_to_display);
+                        $('#modal_json').modal();
+                        $('#modal_json').trigger('focus');
                         clearInterval(interval);
                     }
                 }, 20);
             } catch(e){
-                console.log(e);
+                $("#message_json").text("Votre json de merde est invalide");
+                $("#message_json").css('color', 'red');
+                $("#message_json").fadeIn();
+
             }
         });
     </script>
+
 
 {% endblock %}
