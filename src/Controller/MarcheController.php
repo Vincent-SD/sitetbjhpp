@@ -6,7 +6,7 @@ use App\Entity\Marche;
 use App\Form\MarcheType;
 use App\Repository\MarcheRepository;
 use App\Repository\ProduitRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
