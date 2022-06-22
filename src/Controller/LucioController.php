@@ -23,6 +23,7 @@ class LucioController extends AbstractController
      * @Route("/lucio-parse", name="lucio_parse")
      */
     public function parse() : Response{
+
         return $this->render('');
     }
 }
