@@ -1,0 +1,123 @@
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="{{ asset('css/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <script type="text/javascript" src="{{asset('css/bootstrap/js/bootstrap.js')}}"></script>
+</head>
+
+{% block body %}
+
+    <style>
+        body{
+            background-image: url({{ asset('img/morsayBkg.jpg') }});
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        #gameZone{
+            height: 100%;
+        }
+
+        #gameZone div, #zuongo div{
+            height: 200px;
+        }
+
+
+        #morsayPoint{
+            display: flex;
+            flex-grow: 1;
+        }
+
+
+        #tobioCol{
+            padding-left: 83%;
+            transition: 0.5s;
+        }
+
+        #tobitoPoint{
+            width: 100px;
+            background-image: url({{ asset('img/tobitogif.gif') }});
+            background-repeat: no-repeat;
+            background-size: 100px 200px;
+            cursor: pointer;
+        }
+
+        #morsayPoint{
+            width: 100px;
+            background-image: url({{ asset('img/tshirtZehef.jpg') }});
+            background-repeat: no-repeat;
+            background-size: 100px 200px;
+        }
+
+    </style>
+
+    <div id="gameZone" class="container-fluid">
+        <div id="zuongo" class="row">
+            <div id="morsayPoint" class="col-md-1"></div>
+            <div id="tobioCol" class="col-md-11">
+                <div id="tobitoPoint">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalTobito" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">TOBITO INVADER</h5>
+                </div>
+                <div class="modal-body">
+                    Le malfaisant Tobito cherche à détruire ton stand de t-shirts mais toi, Morsay le Grand ne voit pas cela d'un bon oeil.
+                    Défends ton territoire en tapant Tobito comme une tapette
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="startGame" class="btn btn-danger" data-dismiss="modal">>>> CLIQUE SALOPE <<<</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $(document).ready(function(){
+            $("#modalTobito").modal("show");
+            $(document).on('click','#startGame', function(){
+                let pticon = new Audio("music/ptit-con.wav");
+                pticon.play();
+                let gameZone = $("#gameZone");
+                let tobito = $("#tobitoPoint");
+                let tobitoPos = $("#tobioCol");
+                //si percent = 0 ou jsp, alors tobito ta bien niqué tes t-shirts
+                //console.log(parseInt(tobitoPos.css("padding-left")));
+                //console.log(gameZone.outerWidth(true));
+                let walkInterval = setInterval(function () {
+                    let percent = (parseInt(tobitoPos.css("padding-left")) / gameZone.outerWidth(true)) * 100;
+                    //console.log(percent);
+                    if(percent > 5 ){
+                        tobitoPos.css("padding-left", ( parseInt(tobitoPos.css("padding-left")) - (gameZone.outerWidth(true)*(6/100)) )+"px");
+                    }else{
+                        console.log("Tobited xDD");
+                        clearInterval(walkInterval);
+                    }
+                }, 250);
+            });
+            $(document).on('click','#tobitoPoint', function(){
+                //doublon pck j'men bat les reins jpp²²²
+                let gameZone = $("#gameZone");
+                let tobito = $("#tobitoPoint");
+                let tobitoPos = $("#tobioCol");
+                let areille = ["ptit-con.wav","calibré batard.wav","arrete-shlaguito.wav","ellestpourtoi.wav","chuacliancour.wav","kdocousin.wav","morsay-singerie-1.wav","morsay-singerie-2.wav",
+                "vinceneil.wav","un-shlag-comme -ça.wav","taitai.wav","truanddlagalere.wav","morsay-tape.wav","morsay-violence-encore.wav","morsay jramene un.wav", "morsay-bande-de-f.wav"];
+                let randFeet = Math.floor(Math.random() * areille.length);
+                let feetent = new Audio(`music/${areille[randFeet]}`);
+                feetent.play();
+                tobitoPos.css("padding-left", ( parseInt(tobitoPos.css("padding-left")) + (gameZone.outerWidth(true)*(3/100)) )+"px");
+            });
+        })
+    </script>
+{% endblock %}
