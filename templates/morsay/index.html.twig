@@ -85,7 +85,18 @@
 
     <script>
         $(document).ready(function(){
-            $("#modalTobito").modal("show");
+            $("#modalTobito").modal({backdrop: 'static', keyboard: false}, 'show');
+            $(document).on('mouseover','#startGame', function(){
+                let randFeet = Math.floor(Math.random() * 11);
+                if(randFeet <= 4){
+                    let bigAss = $(".modal-footer").css("flex-direction") === "row-reverse";
+                    if(bigAss){
+                        $(".modal-footer").css("flex-direction","row");
+                    }else{
+                        $(".modal-footer").css("flex-direction","row-reverse");
+                    }
+                }
+            });
             $(document).on('click','#startGame', function(){
                 let pticon = new Audio("music/ptit-con.wav");
                 pticon.play();
@@ -93,11 +104,8 @@
                 let tobito = $("#tobitoPoint");
                 let tobitoPos = $("#tobioCol");
                 //si percent = 0 ou jsp, alors tobito ta bien niqué tes t-shirts
-                //console.log(parseInt(tobitoPos.css("padding-left")));
-                //console.log(gameZone.outerWidth(true));
                 let walkInterval = setInterval(function () {
                     let percent = (parseInt(tobitoPos.css("padding-left")) / gameZone.outerWidth(true)) * 100;
-                    //console.log(percent);
                     if(percent > 5 ){
                         tobitoPos.css("padding-left", ( parseInt(tobitoPos.css("padding-left")) - (gameZone.outerWidth(true)*(6/100)) )+"px");
                     }else{
