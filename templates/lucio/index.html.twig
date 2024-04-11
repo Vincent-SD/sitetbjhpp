@@ -40,6 +40,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Merci merci merciatoi 😳 </button>
+                    <button id="copieurdejson" class="btn btn-secondary">Copie ton json parsed</button>
                 </div>
             </div>
         </div>
@@ -82,6 +83,17 @@
 
             }
         });
+
+        $(document).on('click','#validjson',function (event) {
+            var copyText = document.getElementById("le_json_parser_avec_un_et_pas_un_er");
+            // Select the text field
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
+
+            // Copy the text inside the text field
+            navigator.clipboard.writeText(copyText.value);
+        });
+
     </script>
 
 
