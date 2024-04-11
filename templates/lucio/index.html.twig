@@ -47,12 +47,13 @@
     </div>
 
     <script type="text/javascript">
+        let json_to_display;
         $(document).on('click','#validjson',function (event) {
             try{
                 //parseur de foudre
                 let lejsonaparse = $('#textareajson').val();
                 let json = JSON.parse(lejsonaparse);
-                let json_to_display = JSON.stringify(json, undefined, 4);
+                json_to_display = JSON.stringify(json, undefined, 4);
                 //audio
                 let audio  = new Audio('music/onvaparserdujson.wav');
                 audio.play();
@@ -85,13 +86,8 @@
         });
 
         $(document).on('click','#validjson',function (event) {
-            var copyText = document.getElementById("le_json_parser_avec_un_et_pas_un_er");
-            // Select the text field
-            copyText.select();
-            copyText.setSelectionRange(0, 99999); // For mobile devices
-
             // Copy the text inside the text field
-            navigator.clipboard.writeText(copyText.value);
+            navigator.clipboard.writeText(json_to_display);
         });
 
     </script>
