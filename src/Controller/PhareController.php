@@ -8,6 +8,7 @@ use App\Repository\PhareRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -120,4 +121,31 @@ class PhareController extends AbstractController
 
         return $this->redirectToRoute('phare_index');
     }
+
+    /**
+     * @Route("/api/getall", name="phare_api_all", methods={"GET"})
+     */
+    public function getAllJson(PhareRepository $phareRepository): JsonResponse
+    {
+        // Retrieve all lighthouses using the repository
+        $phares = $phareRepository->findAll();
+
+        // Transform the entities into an array
+        $pharesArray = [];
+        foreach ($phares as $phare) {
+            $pharesArray[] = [
+                'id' => $phare->getId(),
+                'name' => $phare->getName(),
+                'description' => $phare->getDescription(),
+                'longitude' => $phare->getLongitude(),
+                'latitude' => $phare->getLatitude(),
+                'image' => $phare->getImage()
+            ];
+        }
+
+        // Return the JSON response
+        return new JsonResponse($pharesArray);
+    }
+
+
 }
