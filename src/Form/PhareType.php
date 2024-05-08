@@ -19,6 +19,7 @@ class PhareType extends AbstractType
             ->add('description')
             ->add('longitude')
             ->add('latitude')
+            ->add('period')
             ->add('image',FileType::class, [
                 'mapped' => false,
                 'required' => false

@@ -41,6 +41,11 @@ class Phare
      */
     private $image;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $period;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -102,6 +107,18 @@ class Phare
     public function setImage(string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getPeriod(): ?int
+    {
+        return $this->period;
+    }
+
+    public function setPeriod(int $period): self
+    {
+        $this->period = $period;
 
         return $this;
     }
