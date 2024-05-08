@@ -139,7 +139,8 @@ class PhareController extends AbstractController
                 'description' => $phare->getDescription(),
                 'longitude' => $phare->getLongitude(),
                 'latitude' => $phare->getLatitude(),
-                'image' => $phare->getImage()
+                'image' => $phare->getImage(),
+                'period' => $phare->getPeriod()
             ];
         }
 
