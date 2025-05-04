@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Beer;
 use App\Entity\Rank;
 use App\Form\BeerType;
+use App\Form\SearchType;
 use App\Repository\BeerRepository;
 use App\Repository\RankRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -20,26 +21,58 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class BeerController extends AbstractController
 {
+
     /**
      * @Route("/", name="beer_index", methods={"GET"})
      */
-    public function index(BeerRepository $beerRepository,RankRepository $rankRepository): Response
+    public function index(Request $request, BeerRepository $beerRepository, RankRepository $rankRepository): Response
     {
+        // Formulaire de recherche (inutile de handleRequest si on lit via query)
+        $searchForm = $this->createForm(SearchType::class);
 
         $ranks = $rankRepository->findAll();
-        $rankBeers =array();
+        $rankBeers = [];
 
-//        $beers = $rank->getBeers();
-        foreach ($ranks as $rank){
-            $rankBeers[$rank->getName()] = $rank;
+        $query = $request->query->get('query');
+
+        foreach ($ranks as $rank) {
+            // Filtrage des bières par nom ou description
+            if (!empty($query)) {
+                $filteredBeers = $rank->getBeers()->filter(function (Beer $b) use ($query) {
+                    return stripos($b->getName(), $query) !== false ||
+                        stripos($b->getDescription(), $query) !== false;
+                })->toArray();
+
+                $filteredBeers = array_values($filteredBeers); // réindexation
+            } else {
+                $filteredBeers = $rank->getBeers()->toArray();
+            }
+
+            // Mise en gras du mot recherché (à l'arrache dans le contrôleur)
+            foreach ($filteredBeers as &$beer) {
+                $highlighted = '<strong>' . htmlspecialchars($query) . '</strong>';
+
+                $beerName = $beer->getName();
+                $beerDesc = $beer->getDescription();
+
+                $beer->highlightedName = $query
+                    ? str_ireplace($query, $highlighted, htmlspecialchars($beerName))
+                    : htmlspecialchars($beerName);
+
+                $beer->highlightedDescription = $query
+                    ? str_ireplace($query, $highlighted, htmlspecialchars($beerDesc))
+                    : htmlspecialchars($beerDesc);
+            }
+
+            $rankBeers[$rank->getName()] = $filteredBeers;
         }
-//        echo ($rankBeers['S'][2]->getName());
-
 
         return $this->render('beer/index.html.twig', [
             'rankBeers' => $rankBeers,
-            'ranks' => $rankRepository->findAll(),
-            'nbBeers' => $this->getNumberOfBeers($beerRepository)
+            'ranks' => $ranks,
+            'nbBeers' => $this->getNumberOfBeers($beerRepository),
+            'searchForm' => $searchForm->createView(),
+            'query' => $query,
         ]);
     }
 
@@ -150,5 +183,29 @@ class BeerController extends AbstractController
         }
         return 0;
     }
+
+    /**
+     * @Route("/search", name="search_results")
+     */
+    public function search(Request $request, BeerRepository $beerRepository): Response
+    {
+        $form = $this->createForm(SearchType::class);
+        $form->handleRequest($request);
+
+        $results = [];
+        $query = '';
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $query = $form->get('query')->getData();
+            $results = $beerRepository->searchByName($query);
+        }
+
+        return $this->render('search/results.html.twig', [
+            'results' => $results,
+            'query' => $query,
+            'searchForm' => $form->createView(),
+        ]);
+    }
+
 
 }

@@ -31,8 +31,12 @@ class BeerRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    // src/Repository/BeerRepository.php
 
-    // /**
+
+
+
+        // /**
     //  * @return Beer[] Returns an array of Beer objects
     //  */
     /*

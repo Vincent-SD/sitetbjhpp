@@ -32,6 +32,7 @@ class RankRepository extends ServiceEntityRepository
     }
 
 
+
     /*
     public function findOneBySomeField($value): ?Rank
     {

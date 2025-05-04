@@ -9,77 +9,96 @@
             height: 30px;
             border-radius: 15px;
             text-align: center;
-            padding-left: -100px;
         }
         body {
-            background-image:url({{ asset('img/taverne.jpg')}});
-            background-attachment:fixed;
+            background-image: url({{ asset('img/taverne.jpg') }});
+            background-attachment: fixed;
             background-size: cover;
             background-repeat: no-repeat;
         }
 
         a {
             color: black;
-            text-decoration: none; /* no underline */
+            text-decoration: none;
         }
-        a:hover{
+        a:hover {
             color: black;
         }
-
     </style>
+
     <h1>Beer index</h1>
-    <div class="row">
+
+    <div class="row mb-3">
         <div class="col-2">
             <a class="btn btn-primary" href="{{ path('beer_new') }}">Ajouter une bière</a>
         </div>
-       <div class="col-2">
-           <a class="btn btn-primary" href="{{ path('rank_new') }}">Ajouter un tier</a>
-       </div>
+        <div class="col-2">
+            <a class="btn btn-primary" href="{{ path('rank_new') }}">Ajouter un tier</a>
+        </div>
         <div class="col-2">
             <a class="btn btn-primary" href="{{ path('beer_export') }}">Exporter en CSV</a>
         </div>
     </div>
 
+    <div class="card mt-2" style="padding-left: 10em; border-radius: 20px; background-color: rgba(255,255,255,0.8);">
+        <h2 id="nbBeers" class="row card-title zoom">{{ nbBeers }} bières notées</h2>
 
-<div class="card mt-2" style="padding-left: 10em; border-radius: 20px; background-color: rgba(255,255,255,0.8);">
-    <h2 id="nbBeers" class="row card-title zoom">{{ nbBeers }} bières notées</h2>
-
-
-    <div class="row">
-        <div>
-            <button type="button" id="giga_plus_beers" class="btn btn-secondary">Giga <strong>+/-</strong></button>
+        <div class="row mb-3">
+            <div>
+                <button type="button" id="giga_plus_beers" class="btn btn-secondary">Giga <strong>+/-</strong></button>
+            </div>
         </div>
-    </div>
-    {% for rank,beers in rankBeers %}
-        
-        {% if beers.beers[0] is defined %}
-            <div class="row">
-                <a style="margin-left: -7em" aria-controls="rank{{ beers.beers[0].tier.id }}" aria-expanded="false" data-toggle="collapse" href="#rank{{ beers.beers[0].tier.id }}" class="mt-2 col-1 btn btn-secondary btn-circle btn-sm"> + </a>
-                <h1 class="col-12 text-left" style="color :{{ beers.beers[0].tier.color }}"> {{ rank }} </h1>
-            </div>
-            
-            <div class="collapse beersforrank" id="rank{{ beers.beers[0].tier.id }}">
-                {% for beer in beers.beers %}
-                    <div>
-                        <h3> <a href="{{ path('beer_edit', {'id': beer.id}) }}">{{ beer.name }}</a></h3>
-                        <p>{{ beer.description }}</p>
-                    </div>
-                    <hr>
-                {% endfor %}
-            </div>
 
+        <div class="row mb-4">
+            <form method="get" action="{{ path('beer_index') }}" class="form-inline">
+                {{ form_start(searchForm, {'method': 'GET'}) }}
+                {{ form_widget(searchForm.query, {
+                    'attr': {
+                        'placeholder': 'Rechercher une bierasse',
+                        'class': 'form-control'
+                    }
+                }) }}
+                <button type="submit" class="btn btn-primary ml-2">🔍</button>
+                {{ form_end(searchForm, {'render_rest': false}) }}
+            </form>
+        </div>
+
+        {% if query %}
+            <h2>Résultats pour "{{ query }}"</h2>
         {% endif %}
-    {% endfor %}
 
-</div>
+        {% for rank, beers in rankBeers %}
+            {% if beers|length > 0 %}
+                <div class="row">
+                    <a style="margin-left: -7em"
+                       aria-controls="rank{{ loop.index }}"
+                       aria-expanded="false"
+                       data-toggle="collapse"
+                       href="#rank{{ loop.index }}"
+                       class="mt-2 col-1 btn btn-secondary btn-circle btn-sm"> + </a>
+                    <h1 class="col-12 text-left" style="color: {{ beers[0].tier.color }}"> {{ rank }} </h1>
+                </div>
+
+                <div class="collapse beersforrank" id="rank{{ loop.index }}">
+                    {% for beer in beers %}
+                        <div>
+                            <h3><a href="{{ path('beer_edit', {'id': beer.id}) }}">{{ beer.highlightedName|raw }}</a></h3>
+                            <p>{{ beer.highlightedDescription|raw }}</p>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
 
     <script>
-       $(document).ready(function(){
-           let collapsed = true;
-           $(document).on('click','#giga_plus_beers', function(){
-               $('.beersforrank').collapse(collapsed ? 'show' : 'hide');
-               collapsed = !collapsed;
-           });
-       })
+        $(document).ready(function(){
+            let collapsed = true;
+            $('#giga_plus_beers').click(function(){
+                $('.beersforrank').collapse(collapsed ? 'show' : 'hide');
+                collapsed = !collapsed;
+            });
+        });
     </script>
 {% endblock %}
