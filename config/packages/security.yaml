@@ -34,6 +34,7 @@ security:
          - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/beer, roles: [ROLE_ADMIN, ROLE_ACCESMAISPASTROP] }
          - { path: ^/profil, roles: ROLE_USER }
-         - { path: ^/phare/create, roles: ROLE_ADMIN }
+         - { path: ^/phare/new, roles: ROLE_ADMIN }
+         - { path: ^/phare/\d+/edit, roles: ROLE_ADMIN }
          - { path: ^/phare/api/getall, roles: null }
         # - { path: ^/profile, roles: ROLE_USER }
