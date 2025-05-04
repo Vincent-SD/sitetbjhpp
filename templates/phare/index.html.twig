@@ -2,44 +2,41 @@
 
 {% block title %}Phare index{% endblock %}
 
+
 {% block body %}
-    <h1>Phare index</h1>
+    <br>
+    <h1 class="mb-4">Liste des Phares</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Longitude</th>
-                <th>Latitude</th>
-                <th>Period</th>
-                <th>Image</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for phare in phares %}
-            <tr>
-                <td>{{ phare.id }}</td>
-                <td>{{ phare.name }}</td>
-                <td>{{ phare.description }}</td>
-                <td>{{ phare.longitude }}</td>
-                <td>{{ phare.latitude }}</td>
-                <td>{{ phare.period }}</td>
-                <td>{{ phare.image }}</td>
-                <td>
-                    <a href="{{ path('phare_show', {'id': phare.id}) }}">show</a>
-                    <a href="{{ path('phare_edit', {'id': phare.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="mb-3">
+        <a href="{{ path('phare_new') }}" class="btn btn-success">➕ Ajouter un phare</a>
+    </div>
 
-    <a href="{{ path('phare_new') }}">Create new</a>
+    {% if phares is empty %}
+        <div class="alert alert-warning">Aucun phare trouvé.</div>
+    {% else %}
+        <div class="row">
+            {% for phare in phares %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        {% if phare.image %}
+                            <img src="{{ asset(phare.image) }}" class="card-img-top" alt="Image de {{ phare.name }}" style="max-height: 200px; object-fit: cover;">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ phare.name }}</h5>
+                            <p class="card-text text-muted">{{ phare.description|length > 130 ? phare.description|slice(0, 130) ~ '...' : phare.description }}</p>
+                            <ul class="list-unstyled mb-3">
+                                <li><strong>Longitude :</strong> {{ phare.longitude }}</li>
+                                <li><strong>Latitude :</strong> {{ phare.latitude }}</li>
+                                <li><strong>Période :</strong> {{ phare.period }}</li>
+                            </ul>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ path('phare_show', {'id': phare.id}) }}" class="btn btn-outline-primary btn-sm">👁 Voir</a>
+                                <a href="{{ path('phare_edit', {'id': phare.id}) }}" class="btn btn-outline-secondary btn-sm">✏ Modifier</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}
